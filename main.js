@@ -1,14 +1,19 @@
-const { JSDOM } = require("jsdom")
+const { crawlPage } = require("./crawl");
 
-const fetchPage = async () => {
-    const page = await fetch("https://www.tabletennisengland.co.uk/events")
-    const html = await page.text()
+const main = async () => {
+	if (process.argv.length < 3) {
+		console.log("no website provided");
+		process.exit(1);
+	}
+	if (process.argv.length > 3) {
+		console.log("too many command line args");
+		process.exit(1);
+	}
+	const baseURL = process.argv[2];
 
-    const dom = new JSDOM(html)
-    const aTags = dom.window.document.querySelectorAll("a")
-    aTags.forEach((aTag) => {
-        console.log(aTag.href)
-    })
-}
+	console.log(`starting crawl of ${baseURL}`);
+	const pages = await crawlPage(baseURL, baseURL, {});
+	console.log(pages);
+};
 
-fetchPage()
+main();

@@ -1,14 +1,19 @@
 {
-  "name": "tournament-finder",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "start": "node main.js"
-  },
-  "author": "Rowan Murray",
-  "license": "ISC",
-  "dependencies": {
-    "jsdom": "^23.0.1"
-  }
+	"name": "tournament-finder",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"start": "node main.js",
+		"test": "jest"
+	},
+	"author": "Rowan Murray",
+	"license": "ISC",
+	"dependencies": {
+		"jsdom": "^23.0.1"
+	},
+	"devDependencies": {
+		"jest": "^29.7.0",
+		"prettier": "3.1.1"
+	}
 }
