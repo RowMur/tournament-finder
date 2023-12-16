@@ -1,4 +1,5 @@
 const { crawlPage } = require("./crawl");
+const jsonDump = require("./jsonDump");
 
 const main = async () => {
 	if (process.argv.length < 3) {
@@ -13,7 +14,9 @@ const main = async () => {
 
 	console.log(`starting crawl of ${baseURL}`);
 	const pages = await crawlPage(baseURL, baseURL, {});
-	console.log(pages);
+
+	const baseURLObj = new URL(baseURL);
+	jsonDump(`crawled-sites/${baseURLObj.hostname}`, pages);
 };
 
 main();
