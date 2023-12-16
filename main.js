@@ -6,17 +6,17 @@ const main = async () => {
 		console.log("no website provided");
 		process.exit(1);
 	}
-	if (process.argv.length > 3) {
-		console.log("too many command line args");
-		process.exit(1);
-	}
-	const baseURL = process.argv[2];
 
-	console.log(`starting crawl of ${baseURL}`);
-	const pages = await crawlPage(baseURL, baseURL, {});
+	const baseURL = process.argv[2];
+	const acceptablePaths = process.argv.slice(3);
 
 	const baseURLObj = new URL(baseURL);
-	jsonDump(`crawled-sites/${baseURLObj.hostname}`, pages);
+	acceptablePaths.push(baseURLObj.pathname);
+
+	console.log(`starting crawl of ${baseURL}`);
+	const pages = await crawlPage(baseURL, acceptablePaths, baseURL, {});
+
+	jsonDump("crawled-page", pages);
 };
 
 main();

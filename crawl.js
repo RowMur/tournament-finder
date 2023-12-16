@@ -1,9 +1,21 @@
 const { JSDOM } = require("jsdom");
 
-const crawlPage = async (baseURL, currentURL, pages) => {
+const crawlPage = async (baseURL, acceptablePaths, currentURL, pages) => {
 	const baseURLObj = new URL(baseURL);
 	const currentURLObj = new URL(currentURL);
-	if (baseURLObj.hostname !== currentURLObj.hostname) {
+
+	let isOnAcceptablePath = false;
+	for (const acceptablePath of acceptablePaths) {
+		if (currentURLObj.pathname.startsWith(acceptablePath)) {
+			isOnAcceptablePath = true;
+			break;
+		}
+	}
+
+	const shouldCrawl =
+		baseURLObj.hostname === currentURLObj.hostname && isOnAcceptablePath;
+
+	if (!shouldCrawl) {
 		return pages;
 	}
 
@@ -39,7 +51,7 @@ const crawlPage = async (baseURL, currentURL, pages) => {
 		const nextURLs = getURLsFromHTML(htmlBody, baseURL);
 
 		for (const nextURL of nextURLs) {
-			pages = await crawlPage(baseURL, nextURL, pages);
+			pages = await crawlPage(baseURL, acceptablePaths, nextURL, pages);
 		}
 	} catch (err) {
 		console.log(`error in fetch: ${err.message}, on page: ${currentURL}`);
