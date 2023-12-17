@@ -48,7 +48,7 @@ const crawlPage = async (baseURL, acceptablePaths, currentURL, pages) => {
 		}
 
 		const htmlBody = await resp.text();
-		const nextURLs = getURLsFromHTML(htmlBody, baseURL);
+		const nextURLs = getURLsFromHTML(htmlBody, baseURLObj.origin);
 
 		for (const nextURL of nextURLs) {
 			pages = await crawlPage(baseURL, acceptablePaths, nextURL, pages);
@@ -60,26 +60,30 @@ const crawlPage = async (baseURL, acceptablePaths, currentURL, pages) => {
 	return pages;
 };
 
-const getURLsFromHTML = (htmlBody, baseUrl) => {
+const getURLsFromHTML = (htmlBody, originURL) => {
 	const urls = [];
 	const dom = new JSDOM(htmlBody);
 	const linkElements = dom.window.document.querySelectorAll("a");
 	for (const linkElement of linkElements) {
+		let urlObj;
 		if (linkElement.href.slice(0, 1) === "/") {
 			try {
-				const urlObj = new URL(`${baseUrl}${linkElement.href}`);
-				urls.push(urlObj.href);
+				urlObj = new URL(`${originURL}${linkElement.href}`);
 			} catch (err) {
-				console.log(`error with relative url: ${err.message}`);
+				console.log(
+					`error with relative url: ${err.message}, URL: ${linkElement.href}`,
+				);
 			}
 		} else {
 			try {
-				const urlObj = new URL(linkElement.href);
-				urls.push(urlObj.href);
+				urlObj = new URL(linkElement.href);
 			} catch (err) {
-				console.log(`error with absolute url: ${err.message}`);
+				console.log(
+					`error with absolute url: ${err.message}, URL: ${linkElement.href}`,
+				);
 			}
 		}
+		urls.push(urlObj.href);
 	}
 
 	return urls;
