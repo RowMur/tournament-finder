@@ -1,29 +1,23 @@
-const { jsonDump } = require("./jsonHandlers");
+const { getFilename } = require("./jsonHandlers");
 const { expect, test } = require("@jest/globals");
-const fs = require("fs");
 
-test("jsonDump allows you to include .json", () => {
-	const object = { test: 1 };
-	const filename = "file.json";
-
-	fs.writeFileSync = jest.fn();
-	jsonDump(filename, object);
-
-	expect(fs.writeFileSync).toHaveBeenCalledWith(
-		filename,
-		JSON.stringify(object),
-	);
+test("getFilename works without file extension", () => {
+	const input = "filename";
+	const expected = "filename.json";
+	const actual = getFilename(input);
+	expect(actual).toEqual(expected);
 });
 
-test("jsonDump allows you to not include .json", () => {
-	const object = { test: 1 };
-	const filename = "file";
+test("getFilename works without file extension with dots", () => {
+	const input = "google.com";
+	const expected = "google.com.json";
+	const actual = getFilename(input);
+	expect(actual).toEqual(expected);
+});
 
-	fs.writeFileSync = jest.fn();
-	jsonDump(filename, object);
-
-	expect(fs.writeFileSync).toHaveBeenCalledWith(
-		`${filename}.json`,
-		JSON.stringify(object),
-	);
+test("getFilename works without file extension", () => {
+	const input = "filename.json";
+	const expected = "filename.json";
+	const actual = getFilename(input);
+	expect(actual).toEqual(expected);
 });

@@ -15,7 +15,12 @@ const getEvents = async (urls) => {
 
 const getEvent = async (eventURL) => {
 	try {
-		const fullURL = `http://${eventURL}`;
+		let fullURL;
+		if (eventURL.startsWith("http")) {
+			fullURL = eventURL;
+		} else {
+			fullURL = `http://${eventURL}`;
+		}
 		console.log(`actively scraping: ${fullURL}`);
 
 		const resp = await fetch(fullURL);
@@ -99,7 +104,7 @@ const getEvent = async (eventURL) => {
 			closingDate: closingDate,
 			categories: eventCategories,
 			venuePostCode: venuePostCode,
-			page: eventURL,
+			page: fullURL,
 		};
 
 		return event;
