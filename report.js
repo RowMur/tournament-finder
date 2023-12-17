@@ -104,9 +104,32 @@ const getRelevantEvents = (
 	return events.slice(0, nOfEvents);
 };
 
+const logEventsReport = (events) => {
+	console.log("-------------------------------------------------");
+	for (const event of events) {
+		console.log();
+		console.log(
+			`${event.title} ----- ${new Date(event.date).toDateString()}`,
+		);
+		if (event.closingDate) {
+			console.log(
+				`Closing date for entrires: ${new Date(
+					event.closingDate,
+				).toDateString()}`,
+			);
+		}
+		console.log(`Categories: ${event.categories.join(", ")}`);
+		console.log(`Post code: ${event.venuePostCode}`);
+		console.log(`Event page: ${event.page}`);
+		console.log();
+		console.log("-------------------------------------------------");
+	}
+};
+
 module.exports = {
 	filterEventsByDate,
 	sortEventsByDate,
 	filterEventsByCategories,
 	getRelevantEvents,
+	logEventsReport,
 };
