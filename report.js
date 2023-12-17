@@ -1,3 +1,6 @@
+const sendgrid = require("@sendgrid/mail");
+require("dotenv").config();
+
 const filterEventsByDate = (events, dateField) => {
 	return events.filter((event) => {
 		const date = event[dateField] || event.date;
@@ -126,10 +129,42 @@ const logEventsReport = (events) => {
 	}
 };
 
+const sendEventsReport = async (events) => {
+	const apiKey = process.env.EMAIL_KEY;
+	sendgrid.setApiKey(apiKey);
+
+	await sendgrid.send({
+		from: process.env.EMAIL,
+		to: [process.env.EMAIL],
+		subject: `TT Tournaments Report - ${new Date().toDateString()}`,
+		text: `
+			${events
+				.map((event) => {
+					return `
+${event.title} ----- ${new Date(event.date).toDateString()}
+
+${
+	event.closingDate
+		? `Closing date for entrires: ${new Date(
+				event.closingDate,
+			).toDateString()}\n`
+		: ``
+}Categories: ${event.categories.join(", ")}
+Post code: ${event.venuePostCode}
+Event page: ${event.page}
+
+-------------------------------------------------
+`;
+				})
+				.join("\n")}`,
+	});
+};
+
 module.exports = {
 	filterEventsByDate,
 	sortEventsByDate,
 	filterEventsByCategories,
 	getRelevantEvents,
 	logEventsReport,
+	sendEventsReport,
 };

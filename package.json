@@ -10,6 +10,8 @@
 	"author": "Rowan Murray",
 	"license": "ISC",
 	"dependencies": {
+		"@sendgrid/mail": "^8.1.0",
+		"dotenv": "^16.3.1",
 		"jsdom": "^23.0.1"
 	},
 	"devDependencies": {
