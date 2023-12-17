@@ -1,6 +1,7 @@
 name: Run app
 
 on:
+    workflow_dispatch:
     schedule:
         - cron: "40/5 * * * *"
 
