@@ -23,4 +23,4 @@ const jsonLoad = (filename) => {
 	return JSON.parse(jsonFile);
 };
 
-module.exports = { jsonDump, jsonLoad };
+module.exports = { jsonDump, jsonLoad, getFilename };
