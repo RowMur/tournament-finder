@@ -1,4 +1,4 @@
-const jsonDump = require("./jsonDump");
+const { jsonDump } = require("./jsonHandlers");
 const { expect, test } = require("@jest/globals");
 const fs = require("fs");
 
