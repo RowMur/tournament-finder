@@ -1,6 +1,11 @@
 const { crawlPage } = require("./crawl");
 const { getEvents } = require("./events");
 const { jsonLoad, jsonDump } = require("./jsonHandlers");
+const {
+	getRelevantEvents,
+	logEventsReport,
+	sendEventsReport,
+} = require("./report");
 
 const crawl = async () => {
 	const baseURL = "https://www.tabletennisengland.co.uk/events";
@@ -27,12 +32,29 @@ const scrape = async () => {
 	console.log(`scrape of events complete`);
 };
 
+const report = async () => {
+	console.log(`starting to generate report of events`);
+
+	const events = jsonLoad("events");
+	const acceptableAgeBands = ["Senior"];
+	const acceptableTournamentTypes = [];
+	const relevantEvents = getRelevantEvents(
+		events,
+		false,
+		10,
+		acceptableAgeBands,
+		acceptableTournamentTypes,
+	);
+	logEventsReport(relevantEvents);
+	await sendEventsReport(relevantEvents);
+
+	console.log(`report of events complete`);
+};
+
 const main = async () => {
 	await crawl();
-	console.log();
-	console.log("------------------------------------------");
-	console.log();
 	await scrape();
+	await report();
 };
 
 main();
