@@ -1,22 +1,38 @@
 const { crawlPage } = require("./crawl");
-const jsonDump = require("./jsonDump");
+const { getEvents } = require("./events");
+const { jsonLoad, jsonDump } = require("./jsonHandlers");
 
-const main = async () => {
-	if (process.argv.length < 3) {
-		console.log("no website provided");
-		process.exit(1);
-	}
-
-	const baseURL = process.argv[2];
-	const acceptablePaths = process.argv.slice(3);
-
-	const baseURLObj = new URL(baseURL);
-	acceptablePaths.push(baseURLObj.pathname);
+const crawl = async () => {
+	const baseURL = "https://www.tabletennisengland.co.uk/events";
+	const acceptablePaths = ["/events", "/event"];
 
 	console.log(`starting crawl of ${baseURL}`);
-	const pages = await crawlPage(baseURL, acceptablePaths, baseURL, {});
 
+	const pages = await crawlPage(baseURL, acceptablePaths, baseURL, {});
 	jsonDump("crawled-page", pages);
+
+	console.log(`crawl complete of ${baseURL}`);
+};
+
+const scrape = async () => {
+	console.log(`starting to scrape events`);
+
+	const pages = jsonLoad("crawled-page");
+	const urls = Object.keys(pages);
+	const eventURLs = urls.filter((url) => url.includes("/event/"));
+
+	const events = await getEvents(eventURLs);
+	jsonDump("events", events);
+
+	console.log(`scrape of events complete`);
+};
+
+const main = async () => {
+	await crawl();
+	console.log();
+	console.log("------------------------------------------");
+	console.log();
+	await scrape();
 };
 
 main();
