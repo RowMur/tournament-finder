@@ -130,7 +130,7 @@ const logEventsReport = (events) => {
 };
 
 const sendEventsReport = async (events) => {
-	const apiKey = process.env.EMAIL_KEY;
+	const apiKey = process.env.EMAIL_API_KEY;
 	sendgrid.setApiKey(apiKey);
 
 	await sendgrid.send({
