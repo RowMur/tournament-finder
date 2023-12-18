@@ -129,6 +129,62 @@ const logEventsReport = (events) => {
 	}
 };
 
+const generateEventsEmailContent = (events) => {
+	return `
+		<!doctype html>
+		<html>
+			<head>
+				<style>
+					* {
+						margin: 0 auto;
+					}
+
+					th,
+					td {
+						padding: 5px;
+					}
+
+					a:hover {
+						cursor: pointer;
+					}
+				</style>
+			</head>
+			<body style="width: fit-content; align-items: center">
+				<h1 style="margin: 20px auto">
+					Table Tennis Tournaments Report
+					(${new Date().toDateString()})
+				</h1>
+				<table>
+					<tr>
+						<th>Tournament</th>
+						<th>Date</th>
+						<th>Entry Closing Date</th>
+						<th>Categories</th>
+						<th>Post Code</th>
+					</tr>
+					${events.map(
+						(event) => `
+							<tr>
+								<td>
+									<a href="${event.page}">${event.title}</a>
+								</td>
+								<td>
+									${event.date ? new Date(event.date).toDateString() : ""}
+								</td>
+								<td>
+									${event.closingDate ? new Date(event.closingDate).toDateString() : ""}
+								</td>
+								<td>${event.categories.join(", ")}</td>
+								<td>${event.venuePostCode}</td>
+							</tr>
+						`,
+					)}
+				</table>
+			</body>
+		</html>
+	`;
+};
+
 const sendEventsReport = async (events) => {
 	const apiKey = process.env.EMAIL_API_KEY;
 	sendgrid.setApiKey(apiKey);
@@ -137,26 +193,12 @@ const sendEventsReport = async (events) => {
 		from: process.env.EMAIL,
 		to: [process.env.EMAIL],
 		subject: `TT Tournaments Report - ${new Date().toDateString()}`,
-		text: `
-			${events
-				.map((event) => {
-					return `
-${event.title} ----- ${new Date(event.date).toDateString()}
-
-${
-	event.closingDate
-		? `Closing date for entrires: ${new Date(
-				event.closingDate,
-			).toDateString()}\n`
-		: ``
-}Categories: ${event.categories.join(", ")}
-Post code: ${event.venuePostCode}
-Event page: ${event.page}
-
--------------------------------------------------
-`;
-				})
-				.join("\n")}`,
+		content: [
+			{
+				type: "text/html",
+				value: generateEventsEmailContent(events),
+			},
+		],
 	});
 };
 
