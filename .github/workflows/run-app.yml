@@ -1,15 +1,13 @@
 name: Run app
 
 on:
+    workflow_dispatch:
     schedule:
-        - cron: "40/5 * * * *"
+        - cron: "30 20 * * 5"
 
 jobs:
     run:
         runs-on: ubuntu-latest
-
-        environment:
-            name: master
 
         strategy:
             matrix:
@@ -26,3 +24,6 @@ jobs:
             - run: npm run build --if-present
             - run: npm test
             - run: npm start
+              env:
+                  EMAIL_KEY: ${{ secrets.EMAIL_API_KEY }}
+                  EMAIL: ${{ secrets.EMAIL }}
