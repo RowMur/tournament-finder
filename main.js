@@ -9,11 +9,18 @@ const {
 
 const crawl = async () => {
 	const baseURL = "https://www.tabletennisengland.co.uk/events";
-	const acceptablePaths = ["/events", "/event"];
+	const acceptablePaths = ["/events"];
+	const pathsToOnlyCollect = ["/event/"];
 
 	console.log(`starting crawl of ${baseURL}`);
 
-	const pages = await crawlPage(baseURL, acceptablePaths, baseURL, {});
+	const pages = await crawlPage(
+		baseURL,
+		acceptablePaths,
+		pathsToOnlyCollect,
+		baseURL,
+		{},
+	);
 	jsonDump("crawled-page", pages);
 
 	console.log(`crawl complete of ${baseURL}`);

@@ -1,13 +1,23 @@
 const { JSDOM } = require("jsdom");
 
 const getEvents = async (urls) => {
+	const urlsBatches = [];
+	const batchSize = 10;
+	for (let i = 0; i < urls.length; i += batchSize) {
+		urlsBatches.push(urls.slice(i, i + batchSize));
+	}
+
 	const events = [];
-	for (const url of urls) {
-		const event = await getEvent(url);
-		if (event) {
-			events.push(event);
+	for (const urlsBatch of urlsBatches) {
+		const eventPromisesBatch = [];
+		for (const url of urlsBatch) {
+			const eventPromise = getEvent(url);
+			eventPromisesBatch.push(eventPromise);
 		}
-		events.push();
+
+		await Promise.all(eventPromisesBatch).then((values) => {
+			events.push(values.filter((value) => value));
+		});
 	}
 
 	return events;

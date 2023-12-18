@@ -1,8 +1,16 @@
 const { JSDOM } = require("jsdom");
 
-const crawlPage = async (baseURL, acceptablePaths, currentURL, pages) => {
+const crawlPage = async (
+	baseURL,
+	pathsToCrawl,
+	pathsToOnlyCollect,
+	currentURL,
+	pages,
+) => {
 	const baseURLObj = new URL(baseURL);
 	const currentURLObj = new URL(currentURL);
+
+	const acceptablePaths = pathsToCrawl.concat(pathsToOnlyCollect);
 
 	let isOnAcceptablePath = false;
 	for (const acceptablePath of acceptablePaths) {
@@ -26,6 +34,18 @@ const crawlPage = async (baseURL, acceptablePaths, currentURL, pages) => {
 	}
 
 	pages[normalizedCurrentURL] = 1;
+
+	let isOnCollectOnlyPath = false;
+	for (const pathToOnlyCollect of pathsToOnlyCollect) {
+		if (currentURLObj.pathname.startsWith(pathToOnlyCollect)) {
+			isOnCollectOnlyPath = true;
+			break;
+		}
+	}
+
+	if (isOnCollectOnlyPath) {
+		return pages;
+	}
 
 	console.log(`actively crawling: ${currentURL}`);
 
@@ -51,7 +71,13 @@ const crawlPage = async (baseURL, acceptablePaths, currentURL, pages) => {
 		const nextURLs = getURLsFromHTML(htmlBody, baseURLObj.origin);
 
 		for (const nextURL of nextURLs) {
-			pages = await crawlPage(baseURL, acceptablePaths, nextURL, pages);
+			pages = await crawlPage(
+				baseURL,
+				pathsToCrawl,
+				pathsToOnlyCollect,
+				nextURL,
+				pages,
+			);
 		}
 	} catch (err) {
 		console.log(`error in fetch: ${err.message}, on page: ${currentURL}`);
