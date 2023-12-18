@@ -13,6 +13,9 @@ const crawlPage = async (
 	const acceptablePaths = pathsToCrawl.concat(pathsToOnlyCollect);
 
 	let isOnAcceptablePath = false;
+	if (acceptablePaths.length == 0) {
+		isOnAcceptablePath = true;
+	}
 	for (const acceptablePath of acceptablePaths) {
 		if (currentURLObj.pathname.startsWith(acceptablePath)) {
 			isOnAcceptablePath = true;

@@ -44,7 +44,7 @@ test("crawlPage basic", async () => {
 	]);
 
 	const startingURL = "https://www.google.com";
-	const actual = await crawlPage(startingURL, [""], startingURL, {});
+	const actual = await crawlPage(startingURL, [""], [], startingURL, {});
 	const expected = { "www.google.com": 1, "www.google.com/1": 1 };
 	expect(actual).toStrictEqual(expected);
 });
@@ -62,6 +62,7 @@ test("crawlPage only returns internal sub paths", async () => {
 	const actual = await crawlPage(
 		startingURL,
 		["/anotherPath"],
+		[],
 		startingURL,
 		{},
 	);
@@ -79,7 +80,7 @@ test("crawlPage adds to passed in pages", async () => {
 	]);
 
 	const startingURL = "https://www.google.com";
-	const actual = await crawlPage(startingURL, [""], startingURL, {
+	const actual = await crawlPage(startingURL, [""], [], startingURL, {
 		"www.google.com/images": 1,
 	});
 	const expected = { "www.google.com/images": 2, "www.google.com": 1 };
@@ -98,7 +99,7 @@ test("crawlPage logs for bad status code", async () => {
 	global.console.log = jest.fn();
 
 	const startingURL = "https://www.google.com";
-	const actual = await crawlPage(startingURL, [""], startingURL, {});
+	const actual = await crawlPage(startingURL, [""], [], startingURL, {});
 	const expected = { "www.google.com": 1 };
 	expect(actual).toStrictEqual(expected);
 
@@ -119,7 +120,7 @@ test("crawlPage logs for wrong content type", async () => {
 	global.console.log = jest.fn();
 
 	const startingURL = "https://www.google.com";
-	const actual = await crawlPage(startingURL, [""], startingURL, {});
+	const actual = await crawlPage(startingURL, [""], [], startingURL, {});
 	const expected = { "www.google.com": 1 };
 	expect(actual).toStrictEqual(expected);
 
