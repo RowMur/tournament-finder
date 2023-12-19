@@ -1,11 +1,11 @@
-const { crawlPage } = require("./crawl");
-const { getEvents } = require("./events");
-const { jsonLoad, jsonDump } = require("./jsonHandlers");
+const { crawlPage } = require("./utils/crawl");
+const { getEvents } = require("./utils/events");
+const { jsonLoad, jsonDump } = require("./utils/jsonHandlers");
 const {
 	getRelevantEvents,
 	logEventsReport,
 	sendEventsReport,
-} = require("./report");
+} = require("./utils/report");
 
 const crawl = async () => {
 	const baseURL = "https://www.tabletennisengland.co.uk/events";
