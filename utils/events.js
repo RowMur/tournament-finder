@@ -15,8 +15,12 @@ const getEvents = async (urls) => {
 			eventPromisesBatch.push(eventPromise);
 		}
 
-		await Promise.all(eventPromisesBatch).then((values) => {
-			events.push(values.filter((value) => value));
+		await Promise.all(eventPromisesBatch).then((newEvents) => {
+			for (const event of newEvents) {
+				if (event) {
+					events.push(event);
+				}
+			}
 		});
 	}
 

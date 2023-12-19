@@ -6,6 +6,7 @@ const {
 	logEventsReport,
 	sendEventsReport,
 } = require("./utils/report");
+const { getEventsWithJourneys } = require("./utils/routes");
 
 const crawl = async () => {
 	const baseURL = "https://www.tabletennisengland.co.uk/events";
@@ -51,9 +52,16 @@ const report = async () => {
 		10,
 		acceptableAgeBands,
 		acceptableTournamentTypes,
+		false,
 	);
-	logEventsReport(relevantEvents);
-	await sendEventsReport(relevantEvents);
+
+	const eventsWithJourneys = await getEventsWithJourneys(
+		process.env.HOME_POST_CODE,
+		relevantEvents,
+	);
+
+	logEventsReport(eventsWithJourneys);
+	await sendEventsReport(eventsWithJourneys);
 
 	console.log(`report of events complete`);
 };

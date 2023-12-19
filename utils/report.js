@@ -123,6 +123,7 @@ const logEventsReport = (events) => {
 		}
 		console.log(`Categories: ${event.categories.join(", ")}`);
 		console.log(`Post code: ${event.venuePostCode}`);
+		console.log(`Drive to venue: ${event.journey}`);
 		console.log(`Event page: ${event.page}`);
 		console.log();
 		console.log("-------------------------------------------------");
@@ -175,7 +176,7 @@ const generateEventsEmailContent = (events) => {
 									${event.closingDate ? new Date(event.closingDate).toDateString() : ""}
 								</td>
 								<td>${event.categories.join(", ")}</td>
-								<td>${event.venuePostCode}</td>
+								<td>${event.venuePostCode}, ${event.journey}</td>
 							</tr>
 						`,
 					)}

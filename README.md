@@ -6,11 +6,13 @@ A Node.js project for finding table tennis tournaments. I've started playing tou
 
 **Prerequisites**
 
-This app uses the Sendgrid API which requires an API key. Add the following to your `.env` file...
+This app uses the Sendgrid API for sending emails as well as the Google maps API. Add the following to your `.env` file...
 
 ```
 EMAIL_API_KEY=<sendgrid-api-key>
 EMAIL=<email>
+MAPS_KEY=<Google maps API key>
+HOME_POST_CODE=<Home post code>
 ```
 
 ### Main App
