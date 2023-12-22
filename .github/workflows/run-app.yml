@@ -25,7 +25,7 @@ jobs:
             - run: npm test
             - run: npm start
               env:
-                  EMAIL_KEY: ${{ secrets.EMAIL_API_KEY }}
+                  EMAIL_API_KEY: ${{ secrets.EMAIL_API_KEY }}
                   EMAIL: ${{ secrets.EMAIL }}
-                  MAPS_KEY: ${{ secrets.MAPS_KEY }}
+                  MAPS_API_KEY: ${{ secrets.MAPS_KEY }}
                   HOME_POST_CODE: ${{ secrets.HOME_POST_CODE }}

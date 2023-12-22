@@ -3,7 +3,7 @@ require("dotenv").config();
 const getCoordinates = async (query) => {
 	const searchParams = new URLSearchParams({
 		address: query,
-		key: process.env.MAPS_KEY,
+		key: process.env.MAPS_API_KEY,
 	});
 	const url = `https://maps.googleapis.com/maps/api/geocode/json?${searchParams}`;
 	const resp = await fetch(url);
@@ -42,7 +42,7 @@ const getRoute = async (originCoordinates, destinationCoordinates) => {
 		}),
 		headers: new Headers({
 			"Content-type": "application/json",
-			"X-Goog-Api-Key": process.env.MAPS_KEY,
+			"X-Goog-Api-Key": process.env.MAPS_API_KEY,
 			"X-Goog-FieldMask": "routes.distanceMeters,routes.staticDuration",
 		}),
 	});
